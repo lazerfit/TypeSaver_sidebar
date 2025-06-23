@@ -1,0 +1,53 @@
+{
+  "appDescription": {
+    "message": "Quickly save and insert frequently used text snippets via right-click context menu!",
+    "description": "익스텐션 설명"
+  },
+  "HomeInputPlaceholder": {
+    "message": "Please enter a title..",
+    "description": "홈페이지 입력 필드 플레이스홀더"
+  },
+  "HomeTextareaPlaceholder": {
+    "message": "Please enter the content..",
+    "description": "홈페이지 텍스트에어리어 플레이스홀더"
+  },
+  "HomeModalTitle": {
+    "message": "Please enter the title and content."
+  },
+  "HomeModalButton": {
+    "message": "Close"
+  },
+  "HomeSaveButton": {
+    "message": "Save"
+  },
+  "SelectOptionDefault": {
+    "message": "No folder"
+  },
+  "ToastSnippetSave": {
+    "message": "🚀 Saved."
+  },
+  "FolderDeleteConfirm": {
+    "message": "🔥 Are you sure you want to delete the folder?"
+  },
+  "FolderInputPlaceholder": {
+    "message": "folder name.."
+  },
+  "Cancel": {
+    "message": "Cancel"
+  },
+  "Delete": {
+    "message": "Delete"
+  },
+  "Modify": {
+    "message": "Edit"
+  },
+  "VaultSnippetDeleteConfirm": {
+    "message": "🔥 Are you sure you want to delete this snippet?"
+  },
+  "ThemeLight": {
+    "message": "Light"
+  },
+  "ThemeDark": {
+    "message": "Dark"
+  }
+}

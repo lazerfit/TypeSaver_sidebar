@@ -1,0 +1,36 @@
+.snippet-list-wrapper {
+  @include flex-center;
+  flex-direction: column;
+  width: 100%;
+  gap: 10px;
+
+  .list-item {
+    position: relative;
+    width: 100%;
+
+    &:hover {
+      color: white;
+    }
+
+    &:hover .snippet-item-copy-button {
+      color: white;
+    }
+
+    .snippet-item-copy-button {
+      background-color: transparent;
+      border: none;
+      width: 24px;
+      height: 24px;
+      position: absolute;
+      top: 50%;
+      right: 10px;
+      transform: translateY(-50%);
+      color: black;
+      border-radius: 0;
+      padding: 0;
+    }
+  }
+}
+
+
+

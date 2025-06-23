@@ -1,0 +1,183 @@
+@font-face {
+  font-family: 'Edu NSW ACT Hand Pre';
+  src: url('../assets/EduNSWACTHandPre-VariableFont_wght.ttf') format('truetype');
+  font-weight: 400 700;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Wanted Sans Variable';
+  src: url('../assets/WantedSansVariable.ttf') format('truetype');
+  font-weight: 100 900;
+  font-style: normal;
+}
+
+$font-english: 'Edu NSW ACT Hand Pre', cursive;
+$font-korean: 'Wanted Sans Variable', sans-serif;
+@mixin flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.wrapper {
+  @include flex-center;
+  flex-direction: column;
+  margin: 20px;
+}
+
+.content-wrapper {
+  @include flex-center;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+}
+
+.select-wrapper {
+  width: 100%;
+  height: 100%;
+  position: relative;
+
+  &::before {
+    display: none;
+  }
+
+  .select-arrow {
+    position: absolute;
+    right: 10px;
+    top: 40%;
+    pointer-events: none;
+    transform: translateY(-40%);
+  }
+}
+
+input,
+textarea {
+  width: 100%;
+  font-family: $font-korean;
+  font-size: 1rem;
+
+  &::placeholder {
+    font-family: $font-korean;
+  }
+}
+
+input {
+  height: 40px;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
+
+textarea {
+  height: 150px;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  overflow-y: auto;
+}
+
+select {
+  width: 100%;
+  height: 45px;
+  border-radius: 10px;
+  appearance: none;
+  -webkit-appearance: none;
+  padding: 10px 2em 10px 10px;
+  margin-bottom: 10px;
+  border: 1px solid #ddd;
+}
+
+button {
+  @include flex-center;
+  font-family: $font-korean;
+  color: white;
+  background-color: #1D3461;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  padding: 10px;
+  cursor: pointer;
+
+  &:hover {
+    transition: background-color 0.2s, box-shadow 0.2s;
+    background-color: #16305a;
+    box-shadow: 0 4px 12px rgba(29, 52, 97, 0.15);
+  }
+
+  &:active {
+    transform: scale(0.96);
+    transition: transform 0.1s;
+  }
+}
+
+.list-item {
+  background-color: white;
+  color: black;
+  border: none;
+  cursor: pointer;
+  padding: 10px;
+  border-radius: 10px;
+  box-shadow: rgba(0, 0, 0, 0.1) 0 1px 3px 0, rgba(0, 0, 0, 0.06) 0 1px 2px 0;
+
+  &:active {
+    transform: scale(0.96);
+    transition: transform 0.1s;
+  }
+}
+
+.modal-wrapper {
+  @include flex-center;
+  flex-direction: column;
+  font-size: 1rem;
+  width: 100%;
+  gap: 10px;
+
+  .back-button-wrapper {
+    display: flex;
+    width: 100%;
+    cursor: pointer;
+
+    .back-button {
+      font-size: 1.2rem;
+    }
+  }
+
+  .modal-button-wrapper {
+    @include flex-center;
+    gap: 10px;
+    margin-top: 0 !important;
+  }
+
+  .modal-title,
+  .modal-text {
+    width: 100%;
+    font-family: $font-korean;
+
+    &::placeholder {
+      font-family: $font-korean;
+    }
+  }
+
+  input,
+  .modal-title {
+    height: 40px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+  }
+
+  textarea,
+  .modal-text {
+    height: 150px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    overflow-y: auto;
+  }
+}
+
+header,
+footer {
+  @include flex-center;
+  height: 80px;
+}

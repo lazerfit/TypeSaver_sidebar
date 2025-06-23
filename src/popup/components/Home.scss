@@ -1,0 +1,27 @@
+.title-input {
+  border-radius: 10px;
+  border: 1px solid #ddd;
+}
+
+.text-input {
+  border-radius: 10px;
+  margin-top: 10px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+}
+
+.save-button {
+  width: 100px;
+  margin-top: 15px;
+
+  &:hover {
+    transition: background-color 0.2s, box-shadow 0.2s;
+    background-color: #16305a;
+    box-shadow: 0 4px 12px rgba(29, 52, 97, 0.15);
+  }
+
+  &:active {
+    transform: scale(0.96);
+    transition: transform 0.1s;
+  }
+}

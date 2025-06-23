@@ -1,0 +1,60 @@
+body {
+  font-family: $font-korean;
+}
+
+.light-mode {
+  color-scheme: light;
+  background-color: #F8F7F4;
+  color: black;
+
+  input,
+  textarea,
+  select,
+  .modal-name {
+    background-color: white;
+  }
+}
+
+.dark-mode {
+  color-scheme: dark;
+  background-color: #262626;
+  color: #f7f7f7;
+
+  .modal-wrapper {
+    background-color: #262626;
+    color: #f7f7f7;
+
+    .modal-title,
+    .modal-text,
+    .modal-name,
+    .modal-edit-name,
+    .modal-input,
+    .modal-textarea{
+      background-color: #17171b;
+      color: #f7f7f7;
+    }
+  }
+
+  footer,
+  header {
+    background-color: #1a1a1a;
+    color: #f7f7f7;
+  }
+
+  input,
+  textarea,
+  select {
+    background-color: #17171b;
+  }
+
+  button {
+    background-color: #F8F7F4;
+    color: black;
+    border: 1px solid white;
+
+    &:hover {
+      background-color: #6c6fe6;
+    }
+  }
+}
+

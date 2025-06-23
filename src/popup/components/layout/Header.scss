@@ -1,0 +1,23 @@
+header {
+  top: 0;
+  width: 100%;
+  background-color: white;
+  border-bottom: 1px solid #ddd !important;
+}
+
+.logo-wrapper {
+  @include flex-center;
+  width: 100%;
+
+  .logo {
+    font-size: 1.5rem;
+    font-weight: 500;
+    font-family: $font-english;
+    font-optical-sizing: auto;
+    font-style: normal;
+    text-decoration: underline;
+    transform: rotate(-5deg);
+    transform-origin: left bottom;
+  }
+}
+

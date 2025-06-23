@@ -1,0 +1,55 @@
+.select-wrapper {
+  &::before {
+    content: '테마';
+    position: absolute;
+    top: -20px;
+    left: 10px;
+    font-size: 13px;
+    color: #8083ff;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+  }
+}
+
+.setting-about-wrapper {
+  @include flex-center;
+  width: 100%;
+
+  .setting-about-btn {
+    width: 100%;
+
+    .setting-about-btn-inner {
+      @include flex-center;
+      gap: 5px;
+
+      .setting-about-icon {
+        font-size: 1.2rem;
+      }
+    }
+  }
+}
+
+.modal-setting-about-wrapper {
+  @include flex-center;
+  flex-direction: column;
+  width: 100%;
+
+
+  .modal-setting-description {
+    @include flex-center;
+    flex-direction: column;
+    width: 100%;
+    margin-top: 10px;
+    gap: 10px;
+
+    .modal-setting-about-title {
+      font-size: 1.6rem;
+      font-weight: 600;
+    }
+
+    .modal-setting-about-text {
+      font-size: 1.1rem;
+      font-weight: 400;
+    }
+  }
+}
