@@ -20,22 +20,31 @@ $font-korean: 'Wanted Sans Variable', sans-serif;
   justify-content: center;
 }
 
+body {
+  font-family: $font-korean;
+  font-size: 16px;
+}
+
 .wrapper {
-  @include flex-center;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
   flex-direction: column;
-  margin: 20px;
+  padding: 20px;
+  width: 100%;
+  height: calc(100vh - 160px);
+  overflow-y: auto;
 }
 
 .content-wrapper {
   @include flex-center;
   flex-direction: column;
   width: 100%;
-  height: 100%;
+  overflow: unset;
 }
 
 .select-wrapper {
   width: 100%;
-  height: 100%;
   position: relative;
 
   &::before {
@@ -180,4 +189,6 @@ header,
 footer {
   @include flex-center;
   height: 80px;
+  width: 100%;
+  overflow: visible;
 }

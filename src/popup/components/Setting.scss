@@ -1,4 +1,8 @@
-.select-wrapper {
+.setting-select-wrapper {
+  width: 100%;
+  position: relative;
+  margin-top: 20px;
+
   &::before {
     content: '테마';
     position: absolute;
@@ -8,6 +12,14 @@
     color: #8083ff;
     font-weight: 600;
     letter-spacing: 0.5px;
+  }
+
+  .setting-select-arrow {
+    position: absolute;
+    right: 10px;
+    top: 40%;
+    pointer-events: none;
+    transform: translateY(-40%);
   }
 }
 

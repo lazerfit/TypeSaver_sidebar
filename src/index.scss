@@ -1,5 +1,7 @@
-body {
-  font-family: $font-korean;
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
 }
 
 .light-mode {

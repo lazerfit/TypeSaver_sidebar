@@ -39,7 +39,7 @@ const Setting = () => {
 
   return (
     <div className="wrapper">
-      <div className="select-wrapper">
+      <div className="setting-select-wrapper">
         <select
           className="setting-dark-mode-select"
           onChange={(e) => void handleChange(e.target.value)}
@@ -59,7 +59,7 @@ const Setting = () => {
             {chrome.i18n.getMessage("ThemeLight")}
           </option>
         </select>
-        <IoIosArrowDown className="select-arrow" />
+        <IoIosArrowDown className="setting-select-arrow" />
       </div>
       <div className="setting-about-wrapper">
         <button className="setting-about-btn" onClick={openModal}>
