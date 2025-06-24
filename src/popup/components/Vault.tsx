@@ -6,6 +6,14 @@ import { useModal } from "../../hooks/useModal";
 import type { Folder } from "./Folder";
 import { useDarkMode } from "@rbnd/react-dark-mode";
 import { IoCopyOutline } from "react-icons/io5";
+import {
+  type DraggableProvided,
+  DragDropContext,
+  Droppable,
+  Draggable,
+  type DropResult,
+} from "@hello-pangea/dnd";
+import { reorder, getItemStyle } from "../../util/DragndropUtil";
 
 Modal.setAppElement("#root");
 
@@ -102,6 +110,22 @@ const Vault = () => {
       .catch((e) => console.error("Failed to copy text:", e));
   };
 
+  const handleOnDragEnd = (result: DropResult) => {
+    if (!result.destination) {
+      return;
+    }
+
+    const reorderedItems  = reorder(
+        snippetsByFolder,
+        result.source.index,
+        result.destination.index
+    );
+
+    chrome.storage.local.set({[folderName]: reorderedItems}, () => {
+      setSnippetsByFolder(reorderedItems);
+    });
+  }
+
   useEffect(() => {
     chrome.storage.local.get("folder", (result) => {
       setFolderList((result.folder as Folder[]) ?? []);
@@ -136,26 +160,46 @@ const Vault = () => {
           </select>
           <IoIosArrowDown className="select-arrow" />
         </div>
-        <div className="snippet-list-wrapper">
-          {snippetsByFolder.map((snippet) => (
-            <button
-              key={snippet.id}
-              className="list-item"
-              onClick={() => openModal(snippet)}
-            >
-              {snippet.title}
-              <button
-                type="button"
-                className="snippet-item-copy-button"
-                onClick={(e) => handleCopyText(e, snippet.text)}
-                tabIndex={0}
-                aria-label="복사"
-              >
-                <IoCopyOutline className="copy-button" />
-              </button>
-            </button>
-          ))}
-        </div>
+        <DragDropContext onDragEnd={handleOnDragEnd}>
+          <Droppable droppableId="snippet-list-wrapper">
+            {(provided) => (
+                <>
+                  <div className="snippet-list-wrapper" {...provided.droppableProps} ref={provided.innerRef}>
+                    {snippetsByFolder.map((snippet, index) => (
+                        <Draggable key={snippet.id} draggableId={snippet.id} index={index} >
+                          {(provided: DraggableProvided, snapshot) => (
+                              <>
+                                <div
+                                    key={snippet.id}
+                                    className="draggableDiv"
+                                    onClick={() => openModal(snippet)}
+                                    ref={provided.innerRef}
+                                    {...provided.draggableProps}
+                                    {...provided.dragHandleProps}
+                                    style={getItemStyle(snapshot.isDragging, provided.draggableProps.style)}
+                                >
+                                  {snippet.title}
+                                  <button
+                                      type="button"
+                                      className="snippet-item-copy-button"
+                                      onClick={(e) => handleCopyText(e, snippet.text)}
+                                      tabIndex={0}
+                                      aria-label="복사"
+                                  >
+                                    <IoCopyOutline className="copy-button" />
+                                  </button>
+                                </div></>
+                          )}
+                        </Draggable>
+
+                    ))}
+                    {provided.placeholder}
+                  </div>
+                </>
+            )}
+          </Droppable>
+        </DragDropContext>
+
       </div>
       <Modal
         isOpen={isModalOpen}

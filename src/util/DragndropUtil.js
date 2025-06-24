@@ -4,3 +4,7 @@ export const reorder = (list, startIndex, endIndex) => {
     result.splice(endIndex, 0, removed);
     return result;
 };
+export const getItemStyle = (isDragging, draggableStyle) => ({
+    background: isDragging ? "#ADACB5" : "white",
+    ...draggableStyle
+});

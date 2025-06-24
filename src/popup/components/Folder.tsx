@@ -13,7 +13,7 @@ import {
   Draggable,
   type DropResult
 } from "@hello-pangea/dnd";
-import { reorder } from "../../util/DragndropUtil";
+import { reorder, getItemStyle } from "../../util/DragndropUtil";
 
 Modal.setAppElement("#root");
 
@@ -197,14 +197,15 @@ const Folder = () => {
               <div className="folder-list" {...provided.droppableProps} ref={provided.innerRef}>
                 {folders.map((folder, index) => (
                     <Draggable key={folder.id} draggableId={folder.id} index={index}>
-                        {(provided: DraggableProvided) => (
+                        {(provided: DraggableProvided, snapshot) => (
                             <div
                                 key={index}
-                                className="list-item"
+                                className="draggableDiv"
                                 onClick={() => openModal(folder)}
                                 ref={provided.innerRef}
                                 {...provided.draggableProps}
                                 {...provided.dragHandleProps}
+                                style={getItemStyle(snapshot.isDragging, provided.draggableProps.style)}
                             >
                               {folder.name}
                             </div>

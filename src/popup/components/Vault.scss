@@ -4,17 +4,8 @@
   width: 100%;
   gap: 10px;
 
-  .list-item {
+  .draggableDiv {
     position: relative;
-    width: 100%;
-
-    &:hover {
-      color: white;
-    }
-
-    &:hover .snippet-item-copy-button {
-      color: white;
-    }
 
     .snippet-item-copy-button {
       background-color: transparent;
