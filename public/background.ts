@@ -1,5 +1,5 @@
-import type { Folder } from "../src/popup/components/Folder";
-import type { Snippet } from "../src/popup/components/Home";
+import type {Folder} from "../src/popup/components/Folder";
+import type {Snippet} from "../src/popup/components/Home";
 
 chrome.runtime.onInstalled.addListener(() => {
   createContextMenus();
@@ -8,6 +8,7 @@ chrome.runtime.onInstalled.addListener(() => {
 chrome.storage.onChanged.addListener(() => {
   createContextMenus();
 });
+
 
 function createContextMenus() {
   chrome.contextMenus.removeAll(() => {
@@ -25,7 +26,8 @@ function createContextMenus() {
           if (Array.isArray(result[key])) {
             const snippets = result[key] as Snippet[];
             if (snippets.length && snippets[0].folder === "default") {
-              folders.push({ id: "default", name: "default" } as Folder);
+              const folderName = chrome.i18n.getMessage("DefaultFolderName");
+              folders.push({ id: "default", name: folderName } as Folder);
             }
           }
         });
@@ -39,8 +41,8 @@ function createContextMenus() {
           contexts: ["editable"],
         });
 
-        chrome.storage.local.get([folder.name], (res) => {
-          const snippets = (res[folder.name] as Snippet[]) ?? [];
+        chrome.storage.local.get([folder.name === "기본폴더" ? "default" : folder.name], (res) => {
+          const snippets = (res[folder.name === "기본폴더" ? "default" : folder.name] as Snippet[]) ?? [];
           snippets.forEach((snippet) => {
             chrome.contextMenus.create({
               id: `snippet-${snippet.id}`,

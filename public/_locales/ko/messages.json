@@ -49,5 +49,11 @@
   },
   "ThemeDark": {
     "message": "다크 모드"
+  },
+  "FolderNameDuplicate": {
+    "message": "⚠️ 이미 존재하는 폴더 이름입니다."
+  },
+  "DefaultFolderName": {
+    "message": "기본폴더"
   }
 }

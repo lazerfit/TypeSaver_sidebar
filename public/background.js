@@ -18,7 +18,8 @@ function createContextMenus() {
                     if (Array.isArray(result[key])) {
                         const snippets = result[key];
                         if (snippets.length && snippets[0].folder === "default") {
-                            folders.push({ id: "default", name: "default" });
+                            const folderName = chrome.i18n.getMessage("DefaultFolderName");
+                            folders.push({ id: "default", name: folderName });
                         }
                     }
                 });
@@ -30,8 +31,8 @@ function createContextMenus() {
                     title: folder.name,
                     contexts: ["editable"],
                 });
-                chrome.storage.local.get([folder.name], (res) => {
-                    const snippets = res[folder.name] ?? [];
+                chrome.storage.local.get([folder.name === "기본폴더" ? "default" : folder.name], (res) => {
+                    const snippets = res[folder.name === "기본폴더" ? "default" : folder.name] ?? [];
                     snippets.forEach((snippet) => {
                         chrome.contextMenus.create({
                             id: `snippet-${snippet.id}`,

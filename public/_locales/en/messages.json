@@ -49,5 +49,11 @@
   },
   "ThemeDark": {
     "message": "Dark"
+  },
+  "FolderNameDuplicate": {
+    "message": "⚠️ This folder name already exists."
+  },
+  "DefaultFolderName": {
+    "message": "Default"
   }
 }

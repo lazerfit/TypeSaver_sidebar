@@ -5,6 +5,9 @@ import Modal from "react-modal";
 import { useModal } from "../../hooks/useModal";
 import { v4 } from "uuid";
 import { useDarkMode } from "@rbnd/react-dark-mode";
+import * as React from "react";
+import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
+import { reorder } from "../../util/DragndropUtil";
 Modal.setAppElement("#root");
 const Folder = () => {
     const [folderName, setFolderName] = useState("");
@@ -16,6 +19,7 @@ const Folder = () => {
     const [isEditMode, setIsEditMode] = useState(false);
     const [newFolderName, setNewFolderName] = useState("");
     const { mode } = useDarkMode();
+    const [isErrorModalOpen, setIsErrorModalOpen] = useState(false);
     const customStyles = {
         content: {
             top: "50%",
@@ -24,7 +28,7 @@ const Folder = () => {
             bottom: "auto",
             marginRight: "-50%",
             transform: "translate(-50%, -50%)",
-            width: "290px",
+            width: "300px",
             height: "130px",
             backgroundColor: mode === "dark" ? "#262626" : "#F8F7F4",
             borderRadius: "10px",
@@ -44,6 +48,12 @@ const Folder = () => {
         modalClose();
         setIsEditMode(false);
     };
+    const openErrorModal = () => {
+        setIsErrorModalOpen(true);
+    };
+    const closeErrorModal = () => {
+        setIsErrorModalOpen(false);
+    };
     const handleEditClick = () => {
         setNewFolderName(selectedFolder?.name ?? "");
         setIsEditMode(true);
@@ -57,6 +67,15 @@ const Folder = () => {
     const handleNewFolderNameChange = (event) => {
         setNewFolderName(event.target.value);
     };
+    const handleOnDragEnd = (result) => {
+        if (!result.destination) {
+            return;
+        }
+        const reorderedItems = reorder(folders, result.source.index, result.destination.index);
+        chrome.storage.local.set({ ["folder"]: reorderedItems }, () => {
+            setFolders(reorderedItems);
+        });
+    };
     const handleSubmit = () => {
         if (folderName.trim() === "") {
             return;
@@ -65,7 +84,7 @@ const Folder = () => {
             const uuid = v4();
             const prevFolders = result.folder || [];
             const newFolder = { id: uuid, name: folderName };
-            if (!prevFolders.includes(newFolder)) {
+            if (!prevFolders.some((folder) => folder.name === newFolder.name)) {
                 prevFolders.push(newFolder);
                 chrome.storage.local
                     .set({ ["folder"]: prevFolders })
@@ -77,6 +96,9 @@ const Folder = () => {
                     });
                 })
                     .catch((e) => console.log(e));
+            }
+            else {
+                openErrorModal();
             }
         });
     };
@@ -114,6 +136,6 @@ const Folder = () => {
             });
         });
     };
-    return (_jsxs("div", { className: "wrapper", children: [_jsxs("div", { className: "input-wrapper", children: [_jsx("input", { type: "text", className: "folder-input", placeholder: chrome.i18n.getMessage("FolderInputPlaceholder"), value: folderName, onChange: handleInputChange }), _jsx("button", { className: "folder-input-button", onClick: handleSubmit, children: "Add" })] }), _jsx("div", { className: "folder-list", children: folders.map((folder, index) => (_jsx("button", { className: "list-item", onClick: () => openModal(folder), children: folder.name }, index))) }), _jsx(Modal, { isOpen: isModalOpen, onRequestClose: closeModal, style: customStyles, children: isEditMode ? (_jsxs("div", { className: "modal-wrapper", children: [_jsx("input", { type: "text", className: "modal-input", value: newFolderName, onChange: handleNewFolderNameChange }), _jsxs("div", { className: "modal-button-wrapper", children: [_jsx("button", { onClick: handleSubmitEditedFolderName, children: chrome.i18n.getMessage("HomeSaveButton") }), _jsx("button", { onClick: handeEditModeClose, children: chrome.i18n.getMessage("Cancel") })] })] })) : (_jsxs("div", { className: "modal-wrapper", children: [_jsx("div", { className: "modal-title", children: selectedFolder?.name }), _jsxs("div", { className: "modal-button-wrapper", children: [_jsx("button", { onClick: () => handleDeleteFolder(selectedFolder?.id ?? ""), children: chrome.i18n.getMessage("Delete") }), _jsx("button", { onClick: handleEditClick, children: chrome.i18n.getMessage("Modify") })] })] })) })] }));
+    return (_jsxs("div", { className: "wrapper", children: [_jsxs("div", { className: "input-wrapper", children: [_jsx("input", { type: "text", className: "folder-input", placeholder: chrome.i18n.getMessage("FolderInputPlaceholder"), value: folderName, onChange: handleInputChange }), _jsx("button", { className: "folder-input-button", onClick: handleSubmit, children: "Add" })] }), _jsx(DragDropContext, { onDragEnd: handleOnDragEnd, children: _jsx(Droppable, { droppableId: "folder-list", children: (provided) => (_jsxs("div", { className: "folder-list", ...provided.droppableProps, ref: provided.innerRef, children: [folders.map((folder, index) => (_jsx(Draggable, { draggableId: folder.id, index: index, children: (provided) => (_jsx("div", { className: "list-item", onClick: () => openModal(folder), ref: provided.innerRef, ...provided.draggableProps, ...provided.dragHandleProps, children: folder.name }, index)) }, folder.id))), provided.placeholder] })) }) }), _jsx(Modal, { isOpen: isErrorModalOpen, onRequestClose: closeErrorModal, style: customStyles, children: _jsxs("div", { className: "modal-wrapper", children: [_jsx("div", { className: "modal-error-title", children: chrome.i18n.getMessage("FolderNameDuplicate") }), _jsx("button", { className: "modal-button", onClick: closeErrorModal, children: chrome.i18n.getMessage("HomeModalButton") })] }) }), _jsx(Modal, { isOpen: isModalOpen, onRequestClose: closeModal, style: customStyles, children: isEditMode ? (_jsxs("div", { className: "modal-wrapper", children: [_jsx("input", { type: "text", className: "modal-input", value: newFolderName, onChange: handleNewFolderNameChange }), _jsxs("div", { className: "modal-button-wrapper", children: [_jsx("button", { onClick: handleSubmitEditedFolderName, children: chrome.i18n.getMessage("HomeSaveButton") }), _jsx("button", { onClick: handeEditModeClose, children: chrome.i18n.getMessage("Cancel") })] })] })) : (_jsxs("div", { className: "modal-wrapper", children: [_jsx("div", { className: "modal-title", children: selectedFolder?.name }), _jsxs("div", { className: "modal-button-wrapper", children: [_jsx("button", { onClick: () => handleDeleteFolder(selectedFolder?.id ?? ""), children: chrome.i18n.getMessage("Delete") }), _jsx("button", { onClick: handleEditClick, children: chrome.i18n.getMessage("Modify") })] })] })) })] }));
 };
 export default Folder;

@@ -167,6 +167,12 @@ button {
     }
   }
 
+  .modal-error-title {
+    font-family: $font-korean;
+    font-weight: 500;
+    font-size: 1.1rem;
+  }
+
   input,
   .modal-title {
     height: 40px;

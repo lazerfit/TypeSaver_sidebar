@@ -4,6 +4,16 @@ import Modal from "react-modal";
 import { useModal } from "../../hooks/useModal";
 import { v4 } from "uuid";
 import { useDarkMode } from "@rbnd/react-dark-mode";
+import * as React from "react";
+import {
+  type DraggableProvided,
+  type DroppableProvided,
+  DragDropContext,
+  Droppable,
+  Draggable,
+  type DropResult
+} from "@hello-pangea/dnd";
+import { reorder } from "../../util/DragndropUtil";
 
 Modal.setAppElement("#root");
 
@@ -26,6 +36,7 @@ const Folder = () => {
   const [isEditMode, setIsEditMode] = useState(false);
   const [newFolderName, setNewFolderName] = useState("");
   const { mode } = useDarkMode();
+  const [isErrorModalOpen, setIsErrorModalOpen] = useState(false);
 
   const customStyles = {
     content: {
@@ -35,7 +46,7 @@ const Folder = () => {
       bottom: "auto",
       marginRight: "-50%",
       transform: "translate(-50%, -50%)",
-      width: "290px",
+      width: "300px",
       height: "130px",
       backgroundColor: mode === "dark" ? "#262626" : "#F8F7F4",
       borderRadius: "10px",
@@ -59,6 +70,14 @@ const Folder = () => {
     setIsEditMode(false);
   };
 
+  const openErrorModal = () => {
+    setIsErrorModalOpen(true);
+  }
+
+  const closeErrorModal = () => {
+    setIsErrorModalOpen(false);
+  }
+
   const handleEditClick = () => {
     setNewFolderName(selectedFolder?.name ?? "");
     setIsEditMode(true);
@@ -78,6 +97,22 @@ const Folder = () => {
     setNewFolderName(event.target.value);
   };
 
+  const handleOnDragEnd = (result: DropResult) => {
+    if (!result.destination) {
+      return;
+    }
+
+    const reorderedItems  = reorder(
+        folders,
+        result.source.index,
+        result.destination.index
+    );
+
+    chrome.storage.local.set({["folder"]: reorderedItems}, () => {
+      setFolders(reorderedItems);
+    });
+  }
+
   const handleSubmit = () => {
     if (folderName.trim() === "") {
       return;
@@ -86,7 +121,7 @@ const Folder = () => {
       const uuid = v4();
       const prevFolders: Folder[] = (result.folder as Folder[]) || [];
       const newFolder: Folder = { id: uuid, name: folderName };
-      if (!prevFolders.includes(newFolder)) {
+      if (!prevFolders.some((folder) => folder.name === newFolder.name)) {
         prevFolders.push(newFolder);
         chrome.storage.local
           .set({ ["folder"]: prevFolders })
@@ -98,6 +133,8 @@ const Folder = () => {
             });
           })
           .catch((e) => console.log(e));
+      } else {
+        openErrorModal();
       }
     });
   };
@@ -154,17 +191,45 @@ const Folder = () => {
           Add
         </button>
       </div>
-      <div className="folder-list">
-        {folders.map((folder, index) => (
-          <button
-            key={index}
-            className="list-item"
-            onClick={() => openModal(folder)}
-          >
-            {folder.name}
+      <DragDropContext onDragEnd={handleOnDragEnd}>
+        <Droppable droppableId="folder-list">
+          {(provided: DroppableProvided) => (
+              <div className="folder-list" {...provided.droppableProps} ref={provided.innerRef}>
+                {folders.map((folder, index) => (
+                    <Draggable key={folder.id} draggableId={folder.id} index={index}>
+                        {(provided: DraggableProvided) => (
+                            <div
+                                key={index}
+                                className="list-item"
+                                onClick={() => openModal(folder)}
+                                ref={provided.innerRef}
+                                {...provided.draggableProps}
+                                {...provided.dragHandleProps}
+                            >
+                              {folder.name}
+                            </div>
+                        )}
+                    </Draggable>
+                ))}
+                {provided.placeholder}
+              </div>
+          )}
+        </Droppable>
+      </DragDropContext>
+      <Modal
+      isOpen={isErrorModalOpen}
+      onRequestClose={closeErrorModal}
+      style={customStyles}
+      >
+        <div className="modal-wrapper">
+          <div className="modal-error-title">
+            {chrome.i18n.getMessage("FolderNameDuplicate")}
+          </div>
+          <button className="modal-button" onClick={closeErrorModal}>
+            {chrome.i18n.getMessage("HomeModalButton")}
           </button>
-        ))}
-      </div>
+        </div>
+      </Modal>
       <Modal
         isOpen={isModalOpen}
         onRequestClose={closeModal}
