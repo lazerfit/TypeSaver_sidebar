@@ -72,6 +72,31 @@ const Vault = () => {
     setSnippetTitle(title);
   };
 
+  const handleSubmit = () => {
+    if (snippetTitle.trim() === "" || snippetText.trim() === "" || !selectedSnippet) return;
+    else {
+      const updatedSnippet = {
+        ...selectedSnippet,
+        title: snippetTitle.trim(),
+        text: snippetText.trim(),
+      }
+      chrome.storage.local.get([folderName], (result) => {
+        const folder: Snippet[] = (result[folderName] as Snippet[]) ?? [];
+        const updatedFolder = folder.map((s) =>
+            s.id === selectedSnippet?.id ? updatedSnippet : s,
+        );
+        chrome.storage.local.set({ [folderName]: updatedFolder }, () => {
+          setSnippetsByFolder(updatedFolder as Snippet[]);
+          closeModal();
+          setSelectedSnippet(null);
+          setIsEditMode(false);
+          setSnippetText("");
+          setSnippetTitle("");
+        });
+      })
+    }
+  }
+
   const handleOnChangeTitle = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSnippetTitle(event.target.value);
   };
@@ -223,7 +248,7 @@ const Vault = () => {
                 onChange={handleOnChangeText}
               />
               <div className="modal-button-wrapper">
-                <button className="modal-button">
+                <button className="modal-button" onClick={handleSubmit}>
                   {chrome.i18n.getMessage("HomeSaveButton")}
                 </button>
                 <button className="modal-button" onClick={handleCloseEditMode}>
