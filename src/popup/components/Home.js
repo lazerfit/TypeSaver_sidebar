@@ -58,7 +58,6 @@ const Home = () => {
                 .then(() => {
                 setTitle("");
                 setText("");
-                setSelectedFolder("");
                 setToastText(chrome.i18n.getMessage("ToastSnippetSave"));
                 setShowToast(true);
                 setTimeout(() => {
