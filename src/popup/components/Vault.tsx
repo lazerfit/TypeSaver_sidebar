@@ -170,7 +170,6 @@ const Vault = () => {
                           {(provided: DraggableProvided, snapshot) => (
                               <>
                                 <div
-                                    key={snippet.id}
                                     className="draggableDiv"
                                     onClick={() => openModal(snippet)}
                                     ref={provided.innerRef}

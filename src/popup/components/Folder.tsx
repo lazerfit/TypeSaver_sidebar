@@ -199,7 +199,6 @@ const Folder = () => {
                     <Draggable key={folder.id} draggableId={folder.id} index={index}>
                         {(provided: DraggableProvided, snapshot) => (
                             <div
-                                key={index}
                                 className="draggableDiv"
                                 onClick={() => openModal(folder)}
                                 ref={provided.innerRef}
