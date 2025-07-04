@@ -203,7 +203,9 @@ const Vault = () => {
                                     {...provided.dragHandleProps}
                                     style={getItemStyle(snapshot.isDragging, provided.draggableProps.style)}
                                 >
-                                  {snippet.title}
+                                  <div className="snippet-title">
+                                    {snippet.title}
+                                  </div>
                                   <button
                                       type="button"
                                       className="snippet-item-copy-button"
@@ -216,7 +218,6 @@ const Vault = () => {
                                 </div></>
                           )}
                         </Draggable>
-
                     ))}
                     {provided.placeholder}
                   </div>

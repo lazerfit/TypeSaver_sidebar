@@ -7,6 +7,15 @@
   .draggableDiv {
     position: relative;
 
+    .snippet-title {
+      display: block;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      padding-left: 20px;
+      padding-right: 20px;
+    }
+
     .snippet-item-copy-button {
       background-color: transparent;
       border: none;

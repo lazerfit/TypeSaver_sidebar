@@ -146,6 +146,8 @@ button {
   .modal-text {
     width: 100%;
     font-family: $font-korean;
+    word-break: break-all;
+    overflow-y: auto;
 
     &::placeholder {
       font-family: $font-korean;
