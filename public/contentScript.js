@@ -31,9 +31,7 @@ chrome.runtime.onMessage.addListener((msg, _sender, _sendResponse) => {
                 activeElement.focus();
             }
             else {
-                navigator.clipboard
-                    .writeText(msg.text)
-                    .catch((e) => console.error("Failed to copy text:", e));
+                void navigator.clipboard.writeText(msg.text);
             }
         }
     }

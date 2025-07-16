@@ -9,7 +9,6 @@ chrome.storage.onChanged.addListener(() => {
   createContextMenus();
 });
 
-
 function createContextMenus() {
   chrome.contextMenus.removeAll(() => {
     chrome.contextMenus.create({

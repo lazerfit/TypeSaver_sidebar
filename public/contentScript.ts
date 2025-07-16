@@ -38,9 +38,7 @@ chrome.runtime.onMessage.addListener(
           activeElement.dispatchEvent(new Event("input", { bubbles: true }));
           activeElement.focus();
         } else {
-          navigator.clipboard
-            .writeText(msg.text!)
-            .catch((e) => console.error("Failed to copy text:", e));
+            void navigator.clipboard.writeText(msg.text!);
         }
       }
     }

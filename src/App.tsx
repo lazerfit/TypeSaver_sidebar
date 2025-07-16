@@ -5,6 +5,7 @@ import Setting from "./popup/components/Setting";
 import Vault from "./popup/components/Vault";
 import Layout from "./popup/components/layout/Layout";
 import Folder from "./popup/components/Folder";
+import Favorite from "./popup/components/Favorite";
 import { DarkModeProvider } from "@rbnd/react-dark-mode";
 
 function App() {
@@ -18,6 +19,7 @@ function App() {
               <Route path="/vault" element={<Vault />} />
               <Route path="/setting" element={<Setting />} />
               <Route path="/folder" element={<Folder />} />
+              <Route path="/favorite" element={<Favorite />} />
             </Route>
           </Routes>
         </div>

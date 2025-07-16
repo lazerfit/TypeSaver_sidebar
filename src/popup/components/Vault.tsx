@@ -17,7 +17,7 @@ import { reorder, getItemStyle } from "../../util/DragndropUtil";
 
 Modal.setAppElement("#root");
 
-interface Snippet {
+export interface Snippet {
   id: string;
   title: string;
   text: string;
