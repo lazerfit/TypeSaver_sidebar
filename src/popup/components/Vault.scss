@@ -13,7 +13,7 @@
       overflow: hidden;
       text-overflow: ellipsis;
       padding-left: 20px;
-      padding-right: 20px;
+      padding-right: 45px;
     }
 
     .snippet-item-copy-button {
@@ -29,7 +29,27 @@
       border-radius: 0;
       padding: 0;
     }
+
+    .favorite-snippets-save-button {
+      width: 24px;
+      height: 24px;
+      position: absolute;
+      top: 50%;
+      right: 15px;
+      transform: translateY(-50%);
+      background-color: transparent;
+      border: none;
+      color: black;
+      margin-right: 20px;
+      font-size: 1rem;
+      border-radius: 0;
+      padding: 0;
+    }
   }
+}
+
+.favorite-snippet-empty-star {
+  font-size: 1.25rem;
 }
 
 

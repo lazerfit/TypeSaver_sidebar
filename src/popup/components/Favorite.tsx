@@ -1,17 +1,30 @@
-import {DragDropContext, Draggable, type DraggableProvided, Droppable} from "@hello-pangea/dnd";
-import {getItemStyle} from "../../util/DragndropUtil";
+import {DragDropContext, Draggable, type DraggableProvided, Droppable, type DropResult} from "@hello-pangea/dnd";
+import {getItemStyle, reorder} from "../../util/DragndropUtil";
+import {handleCopyText} from "../../util/CommonUtils";
 import {IoCopyOutline} from "react-icons/io5";
 import { PiStarFill } from "react-icons/pi";
 import {useState, useEffect} from "react";
 import type {Snippet} from "./Vault";
 import "./Favorite.scss";
 
-const handleOnDragEnd = () => {
-    return null;
-}
-
 const Favorite = () => {
     const [favoriteSnippets, setFavoriteSnippets] = useState<Snippet[]>([]);
+
+    const handleOnDragEnd = (result: DropResult) => {
+        if (!result.destination) {
+            return;
+        }
+
+        const reorderedItems  = reorder(
+            favoriteSnippets,
+            result.source.index,
+            result.destination.index
+        );
+
+        chrome.storage.local.set({["favoriteSnippets"]: reorderedItems}, () => {
+            setFavoriteSnippets(reorderedItems);
+        });
+    }
 
     useEffect(() => {
         chrome.storage.local.get(["favoriteSnippets"], (result) => {
@@ -31,26 +44,26 @@ const Favorite = () => {
                     favoriteSnippets.length === 0 && (
                         <div className="no-favorite-snippets-wrapper">
                             <div className="no-favorite-snippets-text">
-                                즐겨찾기 추가하시고
+                                {chrome.i18n.getMessage("favoriteSnippetText1")}
                             </div>
                             <div className="no-favorite-snippets-hotkey">
                                 <div className="hotkey-button">Alt</div>
                                 <p> + </p>
                                 <div className="hotkey-button">Shift</div>
                                 <p> + </p>
-                                <div className="hotkey-button">1-9</div>
+                                <div className="hotkey-button">1-4</div>
                             </div>
                             <div className="no-favorite-snippets-text">
-                                를 눌러 빠르게 스니펫을 입력해보세요!
+                                {chrome.i18n.getMessage("favoriteSnippetText2")}
                             </div>
                         </div>
                     )
                 }
                 <DragDropContext onDragEnd={handleOnDragEnd}>
-                    <Droppable droppableId="favorite-snippet-list-wrapper">
+                    <Droppable droppableId="snippet-list-wrapper">
                         {(provided) => (
                             <>
-                                <div className="favorite-snippet-list-wrapper" {...provided.droppableProps}
+                                <div className="snippet-list-wrapper" {...provided.droppableProps}
                                      ref={provided.innerRef}>
                                     {favoriteSnippets.map((snippet, index) => (
                                         <Draggable key={snippet.id} draggableId={snippet.id} index={index}>
@@ -58,7 +71,6 @@ const Favorite = () => {
                                                 <>
                                                     <div
                                                         className="draggableDiv"
-                                                        // onClick={() => openModal(snippet)}
                                                         ref={provided.innerRef}
                                                         {...provided.draggableProps}
                                                         {...provided.dragHandleProps}
@@ -70,7 +82,7 @@ const Favorite = () => {
                                                         <button
                                                             type="button"
                                                             className="snippet-item-copy-button"
-                                                            // onClick={(e) => handleCopyText(e, snippet.text)}
+                                                            onClick={(e) => handleCopyText(e, snippet.text)}
                                                             tabIndex={0}
                                                             aria-label="복사"
                                                         >

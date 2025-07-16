@@ -55,5 +55,11 @@
   },
   "DefaultFolderName": {
     "message": "기본폴더"
+  },
+  "favoriteSnippetText1": {
+    "message": "즐겨찾기 추가하고"
+  },
+  "favoriteSnippetText2": {
+    "message": "키로 빠르게 입력해보세요."
   }
 }
