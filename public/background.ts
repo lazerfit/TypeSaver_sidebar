@@ -19,6 +19,31 @@ async function createContextMenus() {
   });
 
   try {
+    const result = await chrome.storage.local.get(["favoriteSnippets"]);
+    const favoriteSnippets: Snippet[] = result.favoriteSnippets || [];
+
+    if (favoriteSnippets.length > 0) {
+      chrome.contextMenus.create({
+        id: "favoriteSnippets",
+        parentId: "typesaver",
+        title: chrome.i18n.getMessage("favoriteSnippetTitle"),
+        contexts: ["editable"],
+      })
+
+      favoriteSnippets.forEach((snippet) => {
+        chrome.contextMenus.create({
+          id: `snippet-favoriteSnippets-${snippet.id}`,
+          parentId: "favoriteSnippets",
+          title: snippet.title,
+          contexts: ["editable"],
+        });
+      });
+    }
+  } catch (error) {
+    console.error("Error creating favorite snippets context menu:", error);
+  }
+
+  try {
     const result = await chrome.storage.local.get(null);
     const folders = (result.folder as Folder[]) ?? [];
 

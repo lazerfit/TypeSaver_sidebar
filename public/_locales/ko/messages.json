@@ -61,5 +61,8 @@
   },
   "favoriteSnippetText2": {
     "message": "키로 빠르게 입력해보세요."
+  },
+  "favoriteSnippetTitle": {
+    "message": "즐겨찾기"
   }
 }
