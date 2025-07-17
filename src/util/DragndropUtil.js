@@ -6,5 +6,5 @@ export const reorder = (list, startIndex, endIndex) => {
 };
 export const getItemStyle = (isDragging, draggableStyle) => ({
     background: isDragging ? "#ADACB5" : "white",
-    ...draggableStyle
+    ...draggableStyle,
 });

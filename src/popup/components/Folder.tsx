@@ -11,7 +11,7 @@ import {
   DragDropContext,
   Droppable,
   Draggable,
-  type DropResult
+  type DropResult,
 } from "@hello-pangea/dnd";
 import { reorder, getItemStyle } from "../../util/DragndropUtil";
 
@@ -72,11 +72,11 @@ const Folder = () => {
 
   const openErrorModal = () => {
     setIsErrorModalOpen(true);
-  }
+  };
 
   const closeErrorModal = () => {
     setIsErrorModalOpen(false);
-  }
+  };
 
   const handleEditClick = () => {
     setNewFolderName(selectedFolder?.name ?? "");
@@ -102,16 +102,16 @@ const Folder = () => {
       return;
     }
 
-    const reorderedItems  = reorder(
-        folders,
-        result.source.index,
-        result.destination.index
+    const reorderedItems = reorder(
+      folders,
+      result.source.index,
+      result.destination.index,
     );
 
-    chrome.storage.local.set({["folder"]: reorderedItems}, () => {
+    chrome.storage.local.set({ ["folder"]: reorderedItems }, () => {
       setFolders(reorderedItems);
     });
-  }
+  };
 
   const handleSubmit = () => {
     if (folderName.trim() === "") {
@@ -194,32 +194,43 @@ const Folder = () => {
       <DragDropContext onDragEnd={handleOnDragEnd}>
         <Droppable droppableId="folder-list">
           {(provided: DroppableProvided) => (
-              <div className="folder-list" {...provided.droppableProps} ref={provided.innerRef}>
-                {folders.map((folder, index) => (
-                    <Draggable key={folder.id} draggableId={folder.id} index={index}>
-                        {(provided: DraggableProvided, snapshot) => (
-                            <div
-                                className="draggableDiv"
-                                onClick={() => openModal(folder)}
-                                ref={provided.innerRef}
-                                {...provided.draggableProps}
-                                {...provided.dragHandleProps}
-                                style={getItemStyle(snapshot.isDragging, provided.draggableProps.style)}
-                            >
-                              {folder.name}
-                            </div>
-                        )}
-                    </Draggable>
-                ))}
-                {provided.placeholder}
-              </div>
+            <div
+              className="folder-list"
+              {...provided.droppableProps}
+              ref={provided.innerRef}
+            >
+              {folders.map((folder, index) => (
+                <Draggable
+                  key={folder.id}
+                  draggableId={folder.id}
+                  index={index}
+                >
+                  {(provided: DraggableProvided, snapshot) => (
+                    <div
+                      className="draggableDiv"
+                      onClick={() => openModal(folder)}
+                      ref={provided.innerRef}
+                      {...provided.draggableProps}
+                      {...provided.dragHandleProps}
+                      style={getItemStyle(
+                        snapshot.isDragging,
+                        provided.draggableProps.style,
+                      )}
+                    >
+                      {folder.name}
+                    </div>
+                  )}
+                </Draggable>
+              ))}
+              {provided.placeholder}
+            </div>
           )}
         </Droppable>
       </DragDropContext>
       <Modal
-      isOpen={isErrorModalOpen}
-      onRequestClose={closeErrorModal}
-      style={customStyles}
+        isOpen={isErrorModalOpen}
+        onRequestClose={closeErrorModal}
+        style={customStyles}
       >
         <div className="modal-wrapper">
           <div className="modal-error-title">

@@ -1,8 +1,8 @@
-chrome.runtime.onInstalled.addListener(async () => {
-    await createContextMenus();
+chrome.runtime.onInstalled.addListener(() => {
+    createContextMenus().catch((err) => console.log(err));
 });
-chrome.storage.onChanged.addListener(async () => {
-    await createContextMenus();
+chrome.storage.onChanged.addListener(() => {
+    createContextMenus().catch((err) => console.log(err));
 });
 async function createContextMenus() {
     await chrome.contextMenus.removeAll();
@@ -103,26 +103,26 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
         });
     }
 });
-chrome.commands.onCommand.addListener(async (command) => {
-    const match = command.match(/^paste-fav-(\d)$/);
+chrome.commands.onCommand.addListener((command, tab) => {
+    const match = /^paste-fav-(\d)$/.exec(command);
     if (!match)
         return;
     const index = parseInt(match[1], 10) - 1;
-    const result = await chrome.storage.local.get("favoriteSnippets");
-    const favoriteSnippets = result.favoriteSnippets || [];
-    if (favoriteSnippets.length <= index) {
-        return;
-    }
-    const snippet = favoriteSnippets[index];
-    const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
-    if (snippet && tab?.id) {
-        void chrome.tabs.sendMessage(tab.id, {
-            type: "PASTE_SNIPPET",
-            text: snippet.text,
-        });
-    }
-    else {
-        console.warn(`Snippet not found: ${snippet.id}`);
-    }
+    chrome.storage.local.get("favoriteSnippets", (result) => {
+        const favoriteSnippets = result.favoriteSnippets || [];
+        if (favoriteSnippets.length <= index) {
+            return;
+        }
+        const snippet = favoriteSnippets[index];
+        if (snippet && tab?.id) {
+            void chrome.tabs.sendMessage(tab.id, {
+                type: "PASTE_SNIPPET",
+                text: snippet.text,
+            });
+        }
+        else {
+            console.warn(`Snippet not found: ${snippet.id}`);
+        }
+    });
 });
 export {};

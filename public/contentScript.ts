@@ -38,7 +38,7 @@ chrome.runtime.onMessage.addListener(
           activeElement.dispatchEvent(new Event("input", { bubbles: true }));
           activeElement.focus();
         } else {
-            void navigator.clipboard.writeText(msg.text!);
+          void navigator.clipboard.writeText(msg.text!);
         }
       }
     }

@@ -1,12 +1,12 @@
-import type {Folder} from "../src/popup/components/Folder";
-import type {Snippet} from "../src/popup/components/Home";
+import type { Folder } from "../src/popup/components/Folder";
+import type { Snippet } from "../src/popup/components/Home";
 
-chrome.runtime.onInstalled.addListener(async () => {
-  await createContextMenus();
+chrome.runtime.onInstalled.addListener(() => {
+  createContextMenus().catch((err) => console.log(err));
 });
 
-chrome.storage.onChanged.addListener(async () => {
-  await createContextMenus();
+chrome.storage.onChanged.addListener(() => {
+  createContextMenus().catch((err) => console.log(err));
 });
 
 async function createContextMenus() {
@@ -20,7 +20,8 @@ async function createContextMenus() {
 
   try {
     const result = await chrome.storage.local.get(["favoriteSnippets"]);
-    const favoriteSnippets: Snippet[] = result.favoriteSnippets || [];
+    const favoriteSnippets: Snippet[] =
+      (result.favoriteSnippets as Snippet[]) || [];
 
     if (favoriteSnippets.length > 0) {
       chrome.contextMenus.create({
@@ -28,7 +29,7 @@ async function createContextMenus() {
         parentId: "typesaver",
         title: chrome.i18n.getMessage("favoriteSnippetTitle"),
         contexts: ["editable"],
-      })
+      });
 
       favoriteSnippets.forEach((snippet) => {
         chrome.contextMenus.create({
@@ -49,35 +50,36 @@ async function createContextMenus() {
 
     if (!folders.some((f) => f.id === "default")) {
       const hasDefaultSnippets = Object.keys(result).some((key) => {
-        const potentialSnippets = result[key];
+        const potentialSnippets = result[key] as Snippet[] | undefined;
         if (Array.isArray(potentialSnippets) && potentialSnippets.length > 0) {
           return potentialSnippets.some(
-              (snippet) => snippet && snippet.folder === "default"
+            (snippet) => snippet && snippet.folder === "default",
           );
         }
         return false;
       });
 
       if (hasDefaultSnippets) {
-        const folderName = chrome.i18n.getMessage("DefaultFolderName") || "Default";
+        const folderName =
+          chrome.i18n.getMessage("DefaultFolderName") || "Default";
         folders.push({ id: "default", name: folderName });
       }
     }
 
     for (const folder of folders) {
       const folderIdForStorage =
-          folder.id === "default" || folder.name === "기본폴더"
-              ? "default"
-              : folder.name;
+        folder.id === "default" || folder.name === "기본폴더"
+          ? "default"
+          : folder.name;
       const snippetData = await chrome.storage.local.get(folderIdForStorage);
       const snippets = (snippetData[folderIdForStorage] as Snippet[]) ?? [];
       if (folder.name !== "favoriteSnippets") {
-          chrome.contextMenus.create({
-            id: `folder-${folder.id}`,
-            parentId: "typesaver",
-            title: folder.name,
-            contexts: ["editable"],
-          });
+        chrome.contextMenus.create({
+          id: `folder-${folder.id}`,
+          parentId: "typesaver",
+          title: folder.name,
+          contexts: ["editable"],
+        });
 
         snippets.forEach((snippet) => {
           chrome.contextMenus.create({
@@ -95,18 +97,21 @@ async function createContextMenus() {
 }
 
 chrome.contextMenus.onClicked.addListener(
-    (info: chrome.contextMenus.OnClickData, tab?: chrome.tabs.Tab) => {
-      const menuItemId = String(info.menuItemId);
+  (info: chrome.contextMenus.OnClickData, tab?: chrome.tabs.Tab) => {
+    const menuItemId = String(info.menuItemId);
 
-      if (menuItemId.startsWith("snippet-")) {
-        const [, folderStorageKey, ...snippetParts] = menuItemId.split("-");
-        const snippetId = snippetParts.join("-");
-
-        chrome.storage.local.get([folderStorageKey], (result: Record<string, unknown>) => {
+    if (menuItemId.startsWith("snippet-")) {
+      const [, folderStorageKey, ...snippetParts] = menuItemId.split("-");
+      const snippetId = snippetParts.join("-");
+      chrome.storage.local.get(
+        [folderStorageKey],
+        (result: Record<string, unknown>) => {
           const snippets = result[folderStorageKey];
 
           if (Array.isArray(snippets)) {
-            const found = (snippets as Snippet[]).find((s) => s.id === snippetId);
+            const found = (snippets as Snippet[]).find(
+              (s) => s.id === snippetId,
+            );
 
             if (found && tab?.id) {
               void chrome.tabs.sendMessage(tab.id, {
@@ -117,35 +122,39 @@ chrome.contextMenus.onClicked.addListener(
               console.warn(`Snippet not found: ${snippetId}`);
             }
           } else {
-            console.warn(`Snippets array missing for folder: ${folderStorageKey}`);
+            console.warn(
+              `Snippets array missing for folder: ${folderStorageKey}`,
+            );
           }
-        });
-      }
+        },
+      );
     }
+  },
 );
 
-chrome.commands.onCommand.addListener(async (command) => {
-  const match = command.match(/^paste-fav-(\d)$/);
+chrome.commands.onCommand.addListener((command, tab?: chrome.tabs.Tab) => {
+  const match = /^paste-fav-(\d)$/.exec(command);
   if (!match) return;
 
   const index = parseInt(match[1], 10) - 1;
 
-  const result = await chrome.storage.local.get("favoriteSnippets");
-  const favoriteSnippets: Snippet[] = result.favoriteSnippets || [];
+  chrome.storage.local.get("favoriteSnippets", (result) => {
+    const favoriteSnippets: Snippet[] =
+      (result.favoriteSnippets as Snippet[]) || [];
 
-  if (favoriteSnippets.length <= index) {
-    return;
-  }
+    if (favoriteSnippets.length <= index) {
+      return;
+    }
 
-  const snippet = favoriteSnippets[index];
-  const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
+    const snippet = favoriteSnippets[index];
 
-  if (snippet && tab?.id) {
-    void chrome.tabs.sendMessage(tab.id, {
-      type: "PASTE_SNIPPET",
-      text: snippet.text,
-    });
-  } else {
-    console.warn(`Snippet not found: ${snippet.id}`);
-  }
-})
+    if (snippet && tab?.id) {
+      void chrome.tabs.sendMessage(tab.id, {
+        type: "PASTE_SNIPPET",
+        text: snippet.text,
+      });
+    } else {
+      console.warn(`Snippet not found: ${snippet.id}`);
+    }
+  });
+});

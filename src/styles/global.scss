@@ -1,19 +1,20 @@
 @font-face {
-  font-family: 'Edu NSW ACT Hand Pre';
-  src: url('../assets/EduNSWACTHandPre-VariableFont_wght.ttf') format('truetype');
+  font-family: "Edu NSW ACT Hand Pre";
+  src: url("../assets/EduNSWACTHandPre-VariableFont_wght.ttf")
+    format("truetype");
   font-weight: 400 700;
   font-style: normal;
 }
 
 @font-face {
-  font-family: 'Wanted Sans Variable';
-  src: url('../assets/WantedSansVariable.ttf') format('truetype');
+  font-family: "Wanted Sans Variable";
+  src: url("../assets/WantedSansVariable.ttf") format("truetype");
   font-weight: 100 900;
   font-style: normal;
 }
 
-$font-english: 'Edu NSW ACT Hand Pre', cursive;
-$font-korean: 'Wanted Sans Variable', sans-serif;
+$font-english: "Edu NSW ACT Hand Pre", cursive;
+$font-korean: "Wanted Sans Variable", sans-serif;
 @mixin flex-center {
   display: flex;
   align-items: center;
@@ -101,14 +102,16 @@ button {
   @include flex-center;
   font-family: $font-korean;
   color: white;
-  background-color: #1D3461;
+  background-color: #1d3461;
   border: 1px solid #ddd;
   border-radius: 10px;
   padding: 10px;
   cursor: pointer;
 
   &:hover {
-    transition: background-color 0.2s, box-shadow 0.2s;
+    transition:
+      background-color 0.2s,
+      box-shadow 0.2s;
     background-color: #16305a;
     box-shadow: 0 4px 12px rgba(29, 52, 97, 0.15);
   }
@@ -193,7 +196,9 @@ footer {
   border: none;
   padding: 10px;
   border-radius: 10px;
-  box-shadow: rgba(0, 0, 0, 0.1) 0 1px 3px 0, rgba(0, 0, 0, 0.06) 0 1px 2px 0;
+  box-shadow:
+    rgba(0, 0, 0, 0.1) 0 1px 3px 0,
+    rgba(0, 0, 0, 0.06) 0 1px 2px 0;
   @include flex-center;
 
   &:active {
@@ -203,7 +208,7 @@ footer {
 }
 
 .favorite-snippets-header-icon {
-  color: #FDCC0D;
+  color: #fdcc0d;
   width: 24px;
   height: 24px;
 }

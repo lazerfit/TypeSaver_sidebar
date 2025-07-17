@@ -1,5 +1,5 @@
 import { jsx as _jsx, jsxs as _jsxs, Fragment as _Fragment } from "react/jsx-runtime";
-import { DragDropContext, Draggable, Droppable } from "@hello-pangea/dnd";
+import { DragDropContext, Draggable, Droppable, } from "@hello-pangea/dnd";
 import { getItemStyle, reorder } from "../../util/DragndropUtil";
 import { handleCopyText } from "../../util/CommonUtils";
 import { IoCopyOutline } from "react-icons/io5";
