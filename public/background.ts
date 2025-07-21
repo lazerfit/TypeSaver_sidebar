@@ -156,7 +156,6 @@ chrome.commands.onCommand.addListener((command, tab?: chrome.tabs.Tab) => {
   if (!match) return;
 
   const index = parseInt(match[1], 10) - 1;
-  console.log(`Command "${command}" triggered`);
   chrome.storage.local.get("favoriteSnippets", (result) => {
     const favoriteSnippets: Snippet[] =
       (result.favoriteSnippets as Snippet[]) || [];
