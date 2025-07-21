@@ -53,7 +53,7 @@ const Favorite = () => {
               {chrome.i18n.getMessage("favoriteSnippetText1")}
             </div>
             <div className="no-favorite-snippets-hotkey">
-              <div className="hotkey-button">Alt</div>
+              <div className="hotkey-button">Ctrl</div>
               <p> + </p>
               <div className="hotkey-button">Shift</div>
               <p> + </p>

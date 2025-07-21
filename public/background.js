@@ -1,9 +1,23 @@
 chrome.runtime.onInstalled.addListener(() => {
     createContextMenus().catch((err) => console.log(err));
+    checkCommandShortcuts();
 });
 chrome.storage.onChanged.addListener(() => {
     createContextMenus().catch((err) => console.log(err));
 });
+const checkCommandShortcuts = () => {
+    chrome.commands.getAll((commands) => {
+        const missingShortcuts = [];
+        for (const { name, shortcut } of commands) {
+            if (shortcut === "") {
+                missingShortcuts.push(name);
+            }
+        }
+        if (missingShortcuts.length > 0) {
+            console.warn(`Missing shortcuts for commands: ${missingShortcuts.join(", ")}`);
+        }
+    });
+};
 async function createContextMenus() {
     await chrome.contextMenus.removeAll();
     chrome.contextMenus.create({
@@ -108,6 +122,7 @@ chrome.commands.onCommand.addListener((command, tab) => {
     if (!match)
         return;
     const index = parseInt(match[1], 10) - 1;
+    console.log(`Command "${command}" triggered`);
     chrome.storage.local.get("favoriteSnippets", (result) => {
         const favoriteSnippets = result.favoriteSnippets || [];
         if (favoriteSnippets.length <= index) {
