@@ -24,15 +24,26 @@
   .no-favorite-snippets-hotkey {
     @include flex-center;
 
-    .hotkey-button {
+    @at-root .hotkey-button {
       background-color: #1d3461;
       box-shadow:
         rgba(0, 0, 0, 0.1) 0 1px 3px 0,
         rgba(0, 0, 0, 0.06) 0 1px 2px 0;
-      max-width: 200px;
+      max-width: 250px;
       color: white;
       padding: 5px;
       border-radius: 5px;
+      margin: 0 5px;
     }
+  }
+}
+
+.add-button {
+  margin-top: 10px;
+  background-color: #b4b4b4;
+  color: black;
+
+  &:hover {
+    color: white;
   }
 }

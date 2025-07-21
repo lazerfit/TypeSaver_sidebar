@@ -122,7 +122,6 @@ chrome.commands.onCommand.addListener((command, tab) => {
     if (!match)
         return;
     const index = parseInt(match[1], 10) - 1;
-    console.log(`Command "${command}" triggered`);
     chrome.storage.local.get("favoriteSnippets", (result) => {
         const favoriteSnippets = result.favoriteSnippets || [];
         if (favoriteSnippets.length <= index) {

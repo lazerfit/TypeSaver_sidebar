@@ -10,11 +10,13 @@ import { handleCopyText } from "../../util/CommonUtils";
 import { IoCopyOutline } from "react-icons/io5";
 import { PiStarFill } from "react-icons/pi";
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import type { Snippet } from "./Vault";
 import "./Favorite.scss";
 
 const Favorite = () => {
   const [favoriteSnippets, setFavoriteSnippets] = useState<Snippet[]>([]);
+  const navigate = useNavigate();
 
   const handleOnDragEnd = (result: DropResult) => {
     if (!result.destination) {
@@ -53,15 +55,23 @@ const Favorite = () => {
               {chrome.i18n.getMessage("favoriteSnippetText1")}
             </div>
             <div className="no-favorite-snippets-hotkey">
-              <div className="hotkey-button">Ctrl</div>
+              <div className="hotkey-button">Alt</div>
               <p> + </p>
-              <div className="hotkey-button">Shift</div>
-              <p> + </p>
-              <div className="hotkey-button">1-4</div>
+              <div className="hotkey-button">A, S, Z, X</div>
             </div>
             <div className="no-favorite-snippets-text">
               {chrome.i18n.getMessage("favoriteSnippetText2")}
             </div>
+            <div className="hotkey-button">whale://extensions/shortcuts</div>
+            <div className="no-favorite-snippets-text">
+              {chrome.i18n.getMessage("favoriteSnippetText3")}
+            </div>
+            <button
+              className="add-button"
+              onClick={() => void navigate("/Vault")}
+            >
+              {chrome.i18n.getMessage("addFavoriteSnippet")}
+            </button>
           </div>
         )}
         <DragDropContext onDragEnd={handleOnDragEnd}>

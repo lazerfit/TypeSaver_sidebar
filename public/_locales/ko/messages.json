@@ -62,7 +62,13 @@
   "favoriteSnippetText2": {
     "message": "키로 빠르게 입력해보세요."
   },
+  "favoriteSnippetText3": {
+    "message": "페이지에 접속하여 단축키를 변경할 수 있습니다."
+  },
   "favoriteSnippetTitle": {
     "message": "즐겨찾기"
+  },
+  "addFavoriteSnippet": {
+    "message": "추가하기"
   }
 }

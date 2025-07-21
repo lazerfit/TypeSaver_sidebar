@@ -62,7 +62,13 @@
   "favoriteSnippetText2": {
     "message": "for instant access."
   },
+  "favoriteSnippetText3": {
+    "message": "Customize your shortcuts on the following page."
+  },
   "favoriteSnippetTitle": {
     "message": "Favorites"
+  },
+  "addFavoriteSnippet": {
+    "message": "Add"
   }
 }
